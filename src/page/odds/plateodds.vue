@@ -1,0 +1,320 @@
+<template>
+	<div>
+		<div class="g-hd">
+			<h3 class="m-title-tag">筛选查询</h3>
+			<div class="m-search-box">
+			  	<el-input placeholder="请输球队或联赛名搜索" prefix-icon="el-icon-search" class="m-search-input"></el-input>
+			  	<el-date-picker
+			  		v-model="date"
+			      	type="daterange"
+			      	align="right"
+			      	unlink-panels
+			      	range-separator="至"
+			      	start-placeholder="开赛日期（起）"
+			      	end-placeholder="开赛日期（止）"
+			      	:picker-options="pickerOptions"
+			      	class="m-search-date">
+			    </el-date-picker>
+			  	<el-select v-model="select" placeholder="全部" class="m-select">
+				    <el-option
+				      	v-for="item in accounts"
+				      	:key="item.value"
+				      	:label="item.label"
+				      	:value="item.value">
+				    </el-option>
+				</el-select>
+				<el-select v-model="select" placeholder="全部" class="m-select">
+				    <el-option
+				      	v-for="item in accounts"
+				      	:key="item.value"
+				      	:label="item.label"
+				      	:value="item.value">
+				    </el-option>
+				</el-select>
+			    <el-button type="primary" class="u-search">查询</el-button>
+			</div>
+		</div>
+		<div class="g-bd f-cb">
+			<h3 class="m-title-tag">人员列表</h3>
+			<el-table :data="tableData" border stripe fit style="width: 100%;" class="m-table m-low-table" :cell-style="handleBackground">
+				<el-table-column
+			      	type="index"
+					label="编号"
+					width="100">
+			    </el-table-column>
+			    <el-table-column
+					prop="date"
+					label="赛事">
+			    </el-table-column>
+			    <el-table-column
+					prop="name"
+					label="开赛时间">
+			    </el-table-column>
+			    <el-table-column
+					prop="address"
+					label="主队">
+			    </el-table-column>
+			    <el-table-column
+					prop="address"
+					label="客队">
+			    </el-table-column>
+				<el-table-column label="皇冠">
+					<el-table-column
+						prop="name"
+						label="">
+					</el-table-column>
+					<el-table-column
+						prop="name"
+						label="">
+					</el-table-column>
+					<el-table-column
+						prop="name"
+						label="">
+					</el-table-column>
+				</el-table-column>
+				<el-table-column label="金宝博">
+					<el-table-column
+						prop="name"
+						label="">
+					</el-table-column>
+					<el-table-column
+						prop="name"
+						label="">
+					</el-table-column>
+					<el-table-column
+						prop="name"
+						label="">
+					</el-table-column>
+				</el-table-column>
+				<el-table-column label="明生">
+					<el-table-column
+						prop="name"
+						label="">
+					</el-table-column>
+					<el-table-column
+						prop="name"
+						label="">
+					</el-table-column>
+					<el-table-column
+						prop="name"
+						label="">
+					</el-table-column>
+				</el-table-column>
+				<el-table-column label="利记">
+					<el-table-column
+						prop="name"
+						label="">
+					</el-table-column>
+					<el-table-column
+						prop="name"
+						label="">
+					</el-table-column>
+					<el-table-column
+						prop="name"
+						label="">
+					</el-table-column>
+				</el-table-column>
+				<el-table-column label="PB">
+					<el-table-column
+						prop="name"
+						label="">
+					</el-table-column>
+					<el-table-column
+						prop="name"
+						label="">
+					</el-table-column>
+					<el-table-column
+						prop="name"
+						label="">
+					</el-table-column>
+				</el-table-column>
+				<el-table-column label="12bet">
+					<el-table-column
+						prop="name"
+						label="">
+					</el-table-column>
+					<el-table-column
+						prop="name"
+						label="">
+					</el-table-column>
+					<el-table-column
+						prop="name"
+						label="">
+					</el-table-column>
+				</el-table-column>
+			    <el-table-column label="开赔提醒">
+      				<template slot-scope="scope">
+						<el-switch
+							v-model="scope.row.switch"
+							active-color="#15B696"
+							inactive-color="#DBDFE7">
+						</el-switch>
+      				</template>
+				</el-table-column>
+				<el-table-column label="开赛提醒">
+      				<template slot-scope="scope">
+						<el-switch
+							v-model="scope.row.switch"
+							active-color="#15B696"
+							inactive-color="#DBDFE7">
+						</el-switch>
+      				</template>
+				</el-table-column>
+			</el-table>
+			<el-pagination
+				background
+				layout="prev, pager, next"
+				:total="1000" class="m-page">
+			</el-pagination>
+		</div>
+		<!-- 完成订单提示框 -->
+		<el-dialog
+			title="完成"
+			:visible.sync="dialogVisible"
+			width="640px" @close="reset">
+			<div class="m-input-suffix">
+			  	<label for="" class="u-label">实际赔率</label>
+			  	<el-input-number v-model="order_odds" controls-position="right" :min="min_odds" :step="0.01"></el-input-number>
+			</div>
+			<div class="m-input-suffix">
+			  	<label for="" class="u-label">实际投注</label>
+			  	<el-input placeholder="请输入投注金额" v-model="bet_amount"></el-input>
+			</div>
+			<el-button type="primary" @click="handleSubmit" class="u-submit">提 交</el-button>
+			<el-button @click="dialogVisible = false">取 消</el-button>
+		</el-dialog>
+		<!-- 退单订单提示框 -->
+		<el-dialog
+			title="退单"
+			:visible.sync="dialogVisible2"
+			width="720px">
+			<div class="m-input-suffix m-textarea-suffix">
+			  	<label for="" class="u-label">退单原因</label>
+			  	<el-input
+					type="textarea"
+					:rows="3"
+					placeholder="请输入退单原因"
+					v-model="textarea">
+				</el-input>
+			</div>
+			<el-button type="primary" @click="handleSubmit2" class="u-submit">保 存</el-button>
+			<el-button @click="dialogVisible2 = false">取 消</el-button>
+		</el-dialog>
+	</div>
+</template>
+<script>
+	export default {
+		data () {
+			return {
+				pickerOptions: {
+					shortcuts: [{
+						text: '最近一周',
+						onClick (picker) {
+							const end = new Date()
+							const start = new Date()
+							start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
+							picker.$emit('pick', [start, end])
+						}
+					}, {
+						text: '最近一个月',
+						onClick (picker) {
+							const end = new Date()
+							const start = new Date()
+							start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
+							picker.$emit('pick', [start, end])
+						}
+					}, {
+						text: '最近三个月',
+						onClick (picker) {
+							const end = new Date()
+							const start = new Date()
+							start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
+							picker.$emit('pick', [start, end])
+						}
+					}]
+				},
+				date: '',
+				select: '',
+				accounts: [{
+					value: '1',
+					label: 'ss'
+				}],
+				tableData: [{
+					date: '2016-05-02',
+					name: '王小虎',
+					address: '上海市普陀区金沙江路 1518 弄',
+					odds: 2.51,
+					color: '#333',
+					state: 1,
+					switch: true
+				}, {
+					date: '2016-05-04',
+					name: '王小虎',
+					address: '上海市普陀区金沙江路 1517 弄',
+					odds: 2.51,
+					color: '#666',
+					state: 2,
+					switch: true
+				}, {
+					date: '2016-05-01',
+					name: '王小虎',
+					address: '上海市普陀区金沙江路 1519 弄',
+					odds: 2.51,
+					color: '#233',
+					state: 2,
+					switch: true
+				}, {
+					date: '2016-05-03',
+					name: '王小虎',
+					address: '上海市普陀区金沙江路 1516 弄',
+					odds: 2.51,
+					color: '#878',
+					state: 1,
+					switch: true
+				}],
+				dialogVisible: false,
+				dialogVisible2: false,
+				order_odds: '',
+				min_odds: '',
+				bet_amount: '',
+				textarea: ''
+			}
+		},
+		methods: {
+			handleBackground: function ({row, column, rowIndex, columnIndex}) {
+				if (columnIndex === 4) {
+					return {'background-color': this.tableData[rowIndex].color, 'color': '#fff'}
+				}
+				if (columnIndex === 10) {
+					return {'color': this.tableData[rowIndex].state === 1 ? '#67C23A' : '#E6A23C'}
+				}
+			},
+			handleComplete (index, row) {
+				this.dialogVisible = true
+				this.min_odds = row.odds
+			},
+			// 退单
+			handleCancel (index, row) {
+				this.dialogVisible2 = true
+				this.textarea = ''
+			},
+			handleSubmit () {
+
+			},
+			handleSubmit2 () {
+
+			},
+			reset () {
+				this.min_odds = 0
+				this.bet_amount = ''
+			}
+		}
+	}
+</script>
+<style scoped lang="less">
+	.u-submit{
+		width: 120px;
+		margin-left: 224px;
+		margin-bottom: 30px;
+	}
+</style>

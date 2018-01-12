@@ -1,0 +1,230 @@
+/*reset*/
+html,body,h1,h2,h3,h4,h5,h6,div,dl,dt,dd,ul,ol,li,p,blockquote,pre,hr,figure,table,caption,th,td,form,fieldset,legend,input,button,textarea,menu{margin:0;padding:0;}
+table{border-collapse:collapse;border-spacing:0;}
+caption,th{text-align:left;font-weight:normal;}
+li{list-style:none;}
+h1,h2,h3,h4,h5,h6,small{font-size:100%;font-weight: normal;}
+textarea{overflow:auto;resize:none;}
+label,summary{cursor:default;}
+a,button{cursor:pointer;}	
+a,a:hover{color:#fff;text-decoration: none;}
+img{border:0;max-width: 100%;vertical-align: bottom;}
+button{border:none;background: none;}
+input{outline: none;border:none;-webkit-appearance: none;}
+html,body{width: 100%;height: 100%;margin:0 auto;font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;}
+html{background: #F0F2F5;}
+
+/*function*/
+.f-cb:after,.f-cbli li:after{display:block;clear:both;visibility:hidden;height:0;overflow:hidden;content:".";}
+.f-cb,.f-cbli li{zoom:1;}
+.f-ib{display:inline-block;*display:inline;*zoom:1;}
+.f-dn{display:none;}
+.f-db{display:block;}
+.f-fl{float:left;}
+.f-fr{float:right;}
+.f-tal{text-align:left;}
+.f-tac{text-align:center;}
+.f-tar{text-align:right;}
+
+.s-fc{color:#fff}
+.s-fc-org{color:#F0671F}
+.s-fc-gry{color:#B6B6B6}
+
+[v-cloak] {
+	display: none;
+}
+@font-face {
+  font-family: 'iconfont';  /* project id 521293 */
+  src: url('//at.alicdn.com/t/font_521293_81wuwbnv5q99hpvi.eot');
+  src: url('//at.alicdn.com/t/font_521293_81wuwbnv5q99hpvi.eot?#iefix') format('embedded-opentype'),
+  url('//at.alicdn.com/t/font_521293_81wuwbnv5q99hpvi.woff') format('woff'),
+  url('//at.alicdn.com/t/font_521293_81wuwbnv5q99hpvi.ttf') format('truetype'),
+  url('//at.alicdn.com/t/font_521293_81wuwbnv5q99hpvi.svg#iconfont') format('svg');
+}
+.iconfont{
+    font-family:"iconfont" !important;
+    font-size:16px;font-style:normal;
+    -webkit-font-smoothing: antialiased;
+    -webkit-text-stroke-width: 0.2px;
+    -moz-osx-font-smoothing: grayscale;
+    margin-right: 5px;
+    width: 24px;
+    text-align: center;
+    font-size: 18px;
+    vertical-align: middle;
+}
+
+.el-container{
+	height: 100vh;
+}
+header{
+	height: 67px;
+	background: #15B696;
+	font-size: 40px;
+	color: #fff;
+}
+aside{
+	padding-top: 15px;
+	background: #3D3F48;
+	height: 100%;
+}
+/*表格*/
+#app .m-table{
+	margin-top: 22px;
+	box-sizing: border-box;
+	.is-leaf{
+		height: 80px;
+		background: #F5F7FA;
+		color: #606266;
+	}
+	.cell{
+		text-align: center;
+		line-height: 30px;
+		color: #606266;
+	}
+}
+#app .m-low-table{
+	td,th{
+		padding:5px 0;
+		text-align: center;
+	}
+	.cell{
+		height: 30px;
+		line-height: 30px;
+	}
+	.is-leaf{
+		height: 30px;
+		padding:5px 0;
+	}
+}
+/*折叠面板*/
+.el-collapse-item__header{
+	text-align: center;
+	font-size: 16px;
+	color: #606266;
+	.el-collapse-item__arrow{
+		float: none;
+	}
+}
+/*导航*/
+#app .el-menu{
+	border:none;
+	cursor: pointer;
+}
+.el-menu-demo{
+	background: none;
+	border-bottom: 1px solid #CED3DD;
+	margin-bottom: 40px;
+	padding:0 30px;
+	.is-active{
+		color: #15B696;
+	}
+	.el-menu-item{
+		font-size: 16px;
+		margin:0 10px;
+		&:hover{
+			background: none;
+			color: #15B696;
+		}
+	}		
+}
+.el-tabs__nav-wrap{
+	padding:0 50px;
+	.el-tabs__item{
+		font-size: 16px;
+	}
+}
+.g-bd .el-input{
+	width: 240px;
+	height: 40px;
+	.el-input__inner{
+		border: 1px solid #DCDFE6;
+		border-radius: 4px;
+	}
+}
+.m-select .el-input{
+	width: 230px;
+	margin-right: 40px;
+}
+.m-sm-select .el-input{
+	width: 160px;
+}
+.u-label{
+	min-width: 100px;
+	display: inline-block;
+	font-size: 16px;
+	color: #303133;
+}
+.g-bd,.g-hd{
+	padding:18px 21px;
+	background: #fff;
+}
+.g-hd{
+	margin-bottom: 10px;
+}
+/*筛选框*/
+.m-search-box{
+	margin-top: 36px;
+	margin-bottom: 34px;
+	.m-search-input{
+		margin-right: 53px;
+		width: 195px;
+	}
+	.m-long-input{
+		width: 320px;
+		margin-right: 53px;
+	}
+	.m-search-date{
+		margin-right: 53px;
+	}
+	.u-search{
+		width: 100px;
+	}
+}
+.el-menu-item{
+	height: 48px;
+	line-height: 48px;
+}
+.g-form-box{
+	width: 370px;
+	margin: 80px auto 120px;
+	.u-save{
+		margin:10px 20px 0 100px;
+		width: 120px;
+	}
+	.u-empty{
+		width: 80px;
+	}
+}
+/*公共样式*/
+.no-padding{
+	padding: 0!important;
+}
+#app .u-submit{
+	display: inline-block;
+	width: 120px;
+	margin-left: 224px;
+	margin-bottom: 30px;
+}
+/*标题*/
+.m-title-tag{
+	font-size: 16px;
+	color: #3F4145;
+}
+/*输入框*/
+.m-input-suffix{
+	margin-bottom: 30px;
+}
+.m-textarea-suffix{
+	width: 475px;
+	.el-textarea{
+		width: 360px;
+		vertical-align: top;
+	}
+}
+/*分页器*/
+.m-page{
+	margin-top: 128px;
+	margin-bottom: 150px;
+	float: right;
+}
