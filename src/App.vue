@@ -1,7 +1,12 @@
 <template>
     <div id="app">
         <el-container>
-            <el-header>LOGO</el-header>
+            <el-header>
+                LOGO
+                <div class="m-avatar" @click="$router.push({path: '/set/setting'})">
+                    <img src="/build/logo.png">blackstar<i class="el-icon-caret-bottom"></i>
+                </div>
+            </el-header>
             <el-container>
                 <el-aside width="200px" v-show="$route.path!='/login/login'">
                     <el-menu :default-active="$route.path" class="el-menu-vertical-demo" background-color="#3D3F48" text-color="#ffffff" active-text-color="#15B696" router>
@@ -52,10 +57,10 @@
                             <el-menu-item index="/fund/manageaccounts">账号管理</el-menu-item>
                             <el-menu-item index="/fund/addaccount">新增账号</el-menu-item>
                         </el-submenu>
-                        <el-menu-item index="7">
+                        <!-- <el-menu-item index="7">
                             <i class="iconfont">&#xe66c;</i>
                             <span slot="title">赛事预测</span>
-                        </el-menu-item>
+                        </el-menu-item> -->
                     </el-menu>
                 </el-aside>
                 <el-main v-bind:class="{'no-padding':isLoginpage}">

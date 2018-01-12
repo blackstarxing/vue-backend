@@ -88,8 +88,8 @@
 			    </el-table-column>
 			    <el-table-column label="操作" width="232">
       				<template slot-scope="scope">
-        				<el-button size="mini" type="primary" @click="handleEdit(scope.$index, scope.row)">明细</el-button>
-        				<el-button size="mini" type="danger" @click="handleCancel(scope.$index, scope.row)">删除</el-button>
+        				<el-button size="mini" type="primary" @click="handleDetail(scope.$index, scope.row)">明细</el-button>
+        				<el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
       				</template>
 				</el-table-column>
 			</el-table>
@@ -105,12 +105,12 @@
 			:visible.sync="dialogVisible"
 			width="934px" @close="reset">
 			<el-table :data="gridData" border fit class="m-table m-low-table" style="width: 100%;">
-				    <el-table-column property="host" label="单注"></el-table-column>
+				    <el-table-column property="host" label="单注" width="480"></el-table-column>
 				    <el-table-column property="concede" label="单倍奖金"></el-table-column>
 				    <el-table-column property="guest" label="投注金额"></el-table-column>
 				    <el-table-column width="140px" property="date" label="预计奖金"></el-table-column>
 			</el-table>
-			<el-button type="primary" @click="handleSubmit" class="u-submit">提 交</el-button>
+			<el-button type="primary" @click="reset" class="u-submit">确定</el-button>
 		</el-dialog>
 	</div>
 </template>
@@ -213,23 +213,15 @@
 					return {'color': this.tableData[rowIndex].state === 1 ? '#67C23A' : '#E6A23C'}
 				}
 			},
-			handleEdit (index, row) {
+			handleDetail (index, row) {
 				this.dialogVisible = true
 			},
 			// 退单
-			handleCancel (index, row) {
-				this.dialogVisible = true
-				this.textarea = ''
-			},
-			handleSubmit () {
-
-			},
-			handleSubmit2 () {
-
+			handleDelete (index, row) {
+				console.log('删除')
 			},
 			reset () {
-				this.min_odds = 0
-				this.bet_amount = ''
+				this.dialogVisible = false
 			}
 		}
 	}
@@ -241,5 +233,9 @@
 	}
 	.el-input-number{
 		width: 240px;
+	}
+	#app .el-dialog .u-submit{
+		margin-top: 22px;
+		margin-left: 774px;
 	}
 </style>

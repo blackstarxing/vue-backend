@@ -5,6 +5,7 @@ import login from '@/page/login/login'
 // 制定方案
 import formulateplan from '@/page/plans/formulateplan'
 import historyplans from '@/page/plans/historyplans'
+import optimizeplan from '@/page/plans/optimizeplan'
 // 亚盘赔率
 import plateodds from '@/page/odds/plateodds'
 // 补单记录
@@ -24,6 +25,8 @@ import managefund from '@/page/fund/managefund'
 import manageaccounts from '@/page/fund/manageaccounts'
 import accountdetail from '@/page/fund/accountdetail'
 import addaccount from '@/page/fund/addaccount'
+// 设置
+import setting from '@/page/set/setting'
 
 import '../assets/css/style.less'
 Vue.use(Router)
@@ -38,6 +41,11 @@ export default new Router({
       path: '/plans/formulateplan',
       name: '制定方案',
       component: formulateplan
+    },
+    {
+      path: '/plans/optimizeplan',
+      name: '优化方案',
+      component: optimizeplan
     },
     {
       path: '/plans/historyplans',
@@ -113,6 +121,11 @@ export default new Router({
       path: '/fund/managefund',
       name: '资金管理',
       component: managefund
+    },
+    {
+      path: '/set/setting',
+      name: '设置',
+      component: setting
     },
     {path: '*', redirect: '/member/addmember'}
   ]

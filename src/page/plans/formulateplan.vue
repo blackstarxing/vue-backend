@@ -168,14 +168,14 @@
 			</div>
 			<div class="m-input-suffix">
 			  	<label for="" class="u-label">投注倍数：</label>
-			  	<el-input-number v-model="chip_times" controls-position="right"></el-input-number>
+			  	<el-input-number v-model="chip_times" controls-position="right" :min="0"></el-input-number>
 			</div>
 			<div class="m-input-suffix">
 			  	<div class="f-fl">
 			  		<h4>投注金额：<span class="s-fc-org">￥645964</span></h4>
 			  		<p>理论最高奖金：<span class="s-fc-gry">￥645964</span></p>
 			  	</div>
-			  	<el-button type="primary" class="u-op-btn f-fl">优化方案</el-button>
+			  	<el-button type="primary" class="u-op-btn f-fl" @click="$router.push({path: '/plans/optimizeplan', query: {id: '1'}})">优化方案</el-button>
 			</div>
 		</div>
 		<!-- 定制差异值弹框 -->

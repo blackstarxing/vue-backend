@@ -57,11 +57,25 @@ html{background: #F0F2F5;}
 .el-container{
 	height: 100vh;
 }
-header{
-	height: 67px;
+#app .el-header{
+	height: 67px!important;
 	background: #15B696;
 	font-size: 40px;
 	color: #fff;
+}
+.m-avatar{
+	float: right;
+	font-size: 18px;
+	cursor: pointer;
+	margin-top: 14px;
+	img{
+		width: 36px;
+		height: 36px;
+		border-radius: 50%;
+		border:2px solid #fff;
+		vertical-align: middle;
+		margin-right: 16px;
+	}
 }
 aside{
 	padding-top: 15px;
@@ -145,6 +159,32 @@ aside{
 .m-select .el-input{
 	width: 230px;
 	margin-right: 40px;
+}
+.m-step .el-select{
+	width: 160px;
+	.el-input{
+		width: 160px;
+		::-webkit-input-placeholder { /* WebKit browsers */
+		    color: #15B696;
+		}
+		:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+		    color: #15B696;
+		}
+		::-moz-placeholder { /* Mozilla Firefox 19+ */
+		    color: #15B696;
+		}
+		:-ms-input-placeholder { /* Internet Explorer 10+ */
+		    color: #15B696;
+		}
+		.el-input__inner{
+			border: none;
+			background: none;
+			color: #15B696;
+		}
+		.el-select__caret{
+			color: #15B696;
+		}
+	}
 }
 .m-sm-select .el-input{
 	width: 160px;
