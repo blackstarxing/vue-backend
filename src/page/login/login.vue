@@ -1,5 +1,5 @@
 <template>
-	<div class="g-bg">
+	<div class="g-bg g-bd no-padding">
 		<div id="g-login">
 			<h3>登录</h3>
 			<div class="m-st" v-if="step">
@@ -8,7 +8,7 @@
 				</div>
 				<div class="m-input-suffix">
 				  	<el-input placeholder="请输入图片验证码" class="code-text"></el-input>
-				  	<img src="" alt="" class="code-pic">
+				  	<img v-bind:src="imgUrl" alt="" class="code-pic">
 				</div>
 				<el-button type="primary" @click="step = false">确定</el-button>
 			</div>
@@ -17,7 +17,7 @@
 				  	<el-input placeholder="请输入短信验证码" class="code-text"></el-input>
 				  	<span>{{60}}s 重新获取</span>
 				</div>
-				<el-button type="primary">确定</el-button>
+				<el-button type="primary" @click="handleLogin">确定</el-button>
 				<el-button @click="step = true">返回</el-button>
 			</div>
 		</div>
@@ -27,19 +27,28 @@
 	export default {
 		data () {
 			return {
-				step: true
+				step: true,
+				imgUrl: ''
 			}
 		},
 		mounted: function () {
-			// console.log(11)
+			this.imgUrl = this.API + '/login/generateImgCode'
 		},
 		methods: {
+			handleLogin: function () {
+				this.$http.post(this.API + '/login/submit?loginName=admin').then(function (response) {
+					console.log(response)
+				}).catch(function (response) {
+					console.log(response)
+				})
+			}
 		}
 	}
 </script>
 <style scoped lang="less">
 	.g-bg{
-		background: #ccc;
+		background: url('../../assets/images/login_bg.png') no-repeat;
+		background-size: cover;
 		height: 100%;
 	}
 	#g-login{
@@ -78,7 +87,7 @@
 			height: 30px;
 			border: 1px solid #DCDFE6;
 			box-sizing: border-box;
-			vertical-align: middle;
+			margin-bottom: 5px;
 		}
 		.m-nd{
 			span{

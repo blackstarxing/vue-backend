@@ -3,7 +3,7 @@
         <el-container>
             <el-header>
                 LOGO
-                <div class="m-avatar" @click="$router.push({path: '/set/setting'})">
+                <div class="m-avatar" @click="$router.push({path: '/set/setting'})" v-show="$route.path!='/login/login'">
                     <img src="/build/logo.png">blackstar<i class="el-icon-caret-bottom"></i>
                 </div>
             </el-header>
@@ -63,7 +63,10 @@
                         </el-menu-item> -->
                     </el-menu>
                 </el-aside>
-                <el-main v-bind:class="{'no-padding':isLoginpage}">
+                <el-main class="no-padding" v-if="$route.path.indexOf('login')>-1">
+                    <router-view/>
+                </el-main>
+                <el-main v-else>
                     <router-view/>
                 </el-main>
             </el-container>                
@@ -76,18 +79,11 @@ export default {
     name: 'app',
     data () {
         return {
-            isLoginpage: false
         }
     },
     mounted: function () {
-        if (this.$route.path === '/login/login') {
-            this.isLoginpage = true
-        } else {
-            this.isLoginpage = false
-        }
     },
     methods: {
-
     }
 }
 </script>

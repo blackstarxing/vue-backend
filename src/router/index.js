@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 // 登录
 import login from '@/page/login/login'
+import landing from '@/page/login/landing'
 // 制定方案
 import formulateplan from '@/page/plans/formulateplan'
 import historyplans from '@/page/plans/historyplans'
@@ -36,6 +37,11 @@ export default new Router({
       path: '/login/login',
       name: '登录',
       component: login
+    },
+    {
+      path: '/login/landing',
+      name: '欢迎',
+      component: landing
     },
     {
       path: '/plans/formulateplan',

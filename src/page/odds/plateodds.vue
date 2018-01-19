@@ -61,85 +61,85 @@
 				<el-table-column label="皇冠">
 					<el-table-column
 						prop="name"
-						label="">
+						label="贴水">
 					</el-table-column>
 					<el-table-column
 						prop="name"
-						label="">
+						label="盘口">
 					</el-table-column>
 					<el-table-column
 						prop="name"
-						label="">
+						label="贴水">
 					</el-table-column>
 				</el-table-column>
 				<el-table-column label="金宝博">
 					<el-table-column
 						prop="name"
-						label="">
+						label="贴水">
 					</el-table-column>
 					<el-table-column
 						prop="name"
-						label="">
+						label="盘口">
 					</el-table-column>
 					<el-table-column
 						prop="name"
-						label="">
+						label="贴水">
 					</el-table-column>
 				</el-table-column>
 				<el-table-column label="明生">
 					<el-table-column
 						prop="name"
-						label="">
+						label="贴水">
 					</el-table-column>
 					<el-table-column
 						prop="name"
-						label="">
+						label="盘口">
 					</el-table-column>
 					<el-table-column
 						prop="name"
-						label="">
+						label="贴水">
 					</el-table-column>
 				</el-table-column>
 				<el-table-column label="利记">
 					<el-table-column
 						prop="name"
-						label="">
+						label="贴水">
 					</el-table-column>
 					<el-table-column
 						prop="name"
-						label="">
+						label="盘口">
 					</el-table-column>
 					<el-table-column
 						prop="name"
-						label="">
+						label="贴水">
 					</el-table-column>
 				</el-table-column>
 				<el-table-column label="PB">
 					<el-table-column
 						prop="name"
-						label="">
+						label="贴水">
 					</el-table-column>
 					<el-table-column
 						prop="name"
-						label="">
+						label="盘口">
 					</el-table-column>
 					<el-table-column
 						prop="name"
-						label="">
+						label="贴水">
 					</el-table-column>
 				</el-table-column>
 				<el-table-column label="12bet">
 					<el-table-column
 						prop="name"
-						label="">
+						label="贴水">
 					</el-table-column>
 					<el-table-column
 						prop="name"
-						label="">
+						label="盘口">
 					</el-table-column>
 					<el-table-column
 						prop="name"
-						label="">
+						label="贴水">
 					</el-table-column>
 				</el-table-column>
 			    <el-table-column label="开赔提醒">
