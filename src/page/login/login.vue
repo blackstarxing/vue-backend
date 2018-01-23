@@ -4,13 +4,13 @@
 			<h3>登录</h3>
 			<div class="m-st" v-if="step">
 				<div class="m-input-suffix" style="margin-bottom:19px;">
-				  	<el-input placeholder="请输入手机号码"></el-input>
+				  	<el-input placeholder="请输入手机号码" v-model="phone"></el-input>
 				</div>
 				<div class="m-input-suffix">
-				  	<el-input placeholder="请输入图片验证码" class="code-text"></el-input>
+				  	<el-input placeholder="请输入图片验证码" class="code-text" v-model="imgCode"></el-input>
 				  	<img v-bind:src="imgUrl" alt="" class="code-pic">
 				</div>
-				<el-button type="primary" @click="step = false">确定</el-button>
+				<el-button type="primary" @click="getCode">确定</el-button>
 			</div>
 			<div class="m-nd" v-else>
 				<div class="m-input-suffix" style="margin-bottom:19px;">
@@ -28,17 +28,68 @@
 		data () {
 			return {
 				step: true,
-				imgUrl: ''
+				phone: '',
+				imgUrl: '',
+				uuid: '',
+				imgCode: '',
+				avatar: '',
+				userName: ''
 			}
 		},
 		mounted: function () {
-			this.imgUrl = this.API + '/login/generateImgCode'
+			this.getImgCode()
 		},
 		methods: {
+			// 获取图片验证码
+			getImgCode: function () {
+				var _this = this
+				this.$http.post(this.API + '/login/generateImgCode').then(function (response) {
+					_this.imgUrl = response.data.data.url
+					_this.uuid = response.data.data.imgCodeUUID
+				}).catch(function (response) {
+					_this.$message({
+						message: '服务器请求错误',
+						center: true,
+						type: 'warning'
+					})
+				})
+			},
+			// 图片验证码校验
+			getCode: function () {
+				var _this = this
+				var data = {
+					imgCodeUUID: _this.uuid,
+					code: this.imgCode
+				}
+				this.$http.get(this.API + '/login/isEffectiveCode', {params: data}).then(function (response) {
+					if (response.data.success) {
+						_this.step = false
+					} else {
+						_this.$message({
+							message: '图片验证码错误',
+							center: true,
+							type: 'warning'
+						})
+					}
+				}).catch(function (response) {
+					_this.$message({
+						message: '服务器请求错误',
+						center: true,
+						type: 'warning'
+					})
+				})
+			},
+			// 登录
 			handleLogin: function () {
 				this.$http.post(this.API + '/login/submit?loginName=admin').then(function (response) {
-					console.log(response)
-				}).catch(function (response) {
+					this.avatar = response.data.data.photo ? response.data.data.photo : '/build/logo.png'
+					this.userName = response.data.data.userName
+					window.document.cookie = 'userName=' + this.userName
+					window.document.cookie = 'loginName=' + response.data.data.loginName
+					window.document.cookie = 'avatar=' + this.avatar
+					this.$emit('avatar', [this.avatar, this.userName])
+					this.$router.push({path: '/login/landing'})
+				}.bind(this)).catch(function (response) {
 					console.log(response)
 				})
 			}

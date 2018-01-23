@@ -13,8 +13,18 @@ Vue.use(ElementUI)
 Vue.prototype.$http = axios
 Vue.config.productionTip = false
 
+// 解决post方式后端无法获取参数
+axios.defaults.transformRequest = [function (data) {
+	// Do whatever you want to transform the data
+	let newData = ''
+	for (let k in data) {
+		newData += encodeURIComponent(k) + '=' + encodeURIComponent(data[k]) + '&'
+	}
+	return newData
+}]
+
 if (process.env.NODE_ENV === 'development') {
-	Vue.prototype.API = 'http://192.168.1.153:8000/admin'
+	Vue.prototype.API = 'http://192.168.0.109:8000/admin'
 } else {
 	Vue.prototype.API = ''
 }

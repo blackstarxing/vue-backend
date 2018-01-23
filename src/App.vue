@@ -4,7 +4,7 @@
             <el-header>
                 LOGO
                 <div class="m-avatar" @click="$router.push({path: '/set/setting'})" v-show="$route.path!='/login/login'">
-                    <img src="/build/logo.png">blackstar<i class="el-icon-caret-bottom"></i>
+                    <img :src="head_avatar">{{userName}}<i class="el-icon-caret-bottom"></i>
                 </div>
             </el-header>
             <el-container>
@@ -64,10 +64,10 @@
                     </el-menu>
                 </el-aside>
                 <el-main class="no-padding" v-if="$route.path.indexOf('login')>-1">
-                    <router-view/>
+                    <router-view v-on:avatar="freshAvatar"/>
                 </el-main>
                 <el-main v-else>
-                    <router-view/>
+                    <router-view v-on:avatar="freshAvatar"/>
                 </el-main>
             </el-container>                
         </el-container>
@@ -79,11 +79,29 @@ export default {
     name: 'app',
     data () {
         return {
+            head_avatar: '',
+            userName: ''
         }
     },
     mounted: function () {
+        this.userName = this.getCookie('userName')
+        this.head_avatar = this.getCookie('avatar')
     },
     methods: {
+        getCookie: function (name) {
+            var arr
+            var reg = new RegExp('(^| )' + name + '=([^;]*)(;|$)')
+            arr = document.cookie.match(reg)
+            if (arr) {
+                return unescape(arr[2])
+            } else {
+                return null
+            }
+        },
+        freshAvatar: function (text) {
+            this.head_avatar = text[0]
+            this.userName = text[1]
+        }
     }
 }
 </script>

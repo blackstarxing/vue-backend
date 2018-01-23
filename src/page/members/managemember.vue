@@ -27,24 +27,25 @@
 					width="100px">
 			    </el-table-column>
 			    <el-table-column
-					prop="date"
+					prop="userName"
 					label="姓名">
 			    </el-table-column>
 			    <el-table-column
-					prop="name"
+					prop="loginName"
 					label="手机号">
 			    </el-table-column>
 			    <el-table-column
-					prop="address"
+					prop="sysRoleName"
 					label="角色">
 			    </el-table-column>
 			    <el-table-column
-					prop="address"
+					prop="createTime"
 					label="创建时间">
 			    </el-table-column>
-			    <el-table-column
-					prop="address"
-					label="状态">
+			    <el-table-column label="状态">
+					<template slot-scope="scope">
+						{{scope.row.status?'正常':'禁用'}}
+					</template>
 			    </el-table-column>
 			    <el-table-column label="操作">
       				<template slot-scope="scope">
@@ -56,7 +57,8 @@
 			<el-pagination
 				background
 				layout="prev, pager, next"
-				:total="1000" class="m-page">
+				:page-size="pageSize"
+				:total="total" class="m-page" @current-change="refreshData">
 			</el-pagination>
 		</div>
 	</div>
@@ -65,6 +67,9 @@
 	export default {
 		data () {
 			return {
+				currentPage: 1,
+				pageSize: 20,
+				total: 0,
 				pickerOptions: {
 					shortcuts: [{
 						text: '最近一周',
@@ -110,6 +115,33 @@
 					name: '王小虎',
 					address: '上海市普陀区金沙江路 1516 弄'
 				}]
+			}
+		},
+		mounted: function () {
+			var _this = this
+			this.$http.post(this.API + '/loginUser/list/json').then(function (response) {
+				if (response.data.success) {
+					_this.tableData = response.data.data.rows
+					_this.pageSize = response.data.data.pageSize
+					_this.total = response.data.data.total
+				} else {
+					_this.$message({
+						message: '错误',
+						type: 'warning'
+					})
+				}
+			}).catch(function (response) {
+				_this.$message({
+					message: '服务器请求错误',
+					type: 'warning'
+				})
+			})
+		},
+		methods: {
+			// 翻页
+			refreshData: function (currentPage) {
+				this.currentPage = currentPage
+				console.log(currentPage)
 			}
 		}
 	}
