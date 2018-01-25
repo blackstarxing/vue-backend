@@ -3,7 +3,7 @@
 		<div class="g-hd">
 			<h3 class="m-title-tag">筛选查询</h3>
 			<div class="m-search-box">
-			  	<el-input placeholder="请输入姓名搜索" prefix-icon="el-icon-search" class="m-search-input"></el-input>
+			  	<el-input placeholder="请输入姓名搜索" prefix-icon="el-icon-search" class="m-search-input" v-model="form.userName"></el-input>
 			  	<el-date-picker
 			  		v-model="date"
 			      	type="daterange"
@@ -13,13 +13,14 @@
 			      	start-placeholder="创建日期（起）"
 			      	end-placeholder="创建日期（止）"
 			      	:picker-options="pickerOptions"
+			      	value-format="yyyy-MM-dd"
 			      	class="m-search-date">
 			    </el-date-picker>
-			    <el-button type="primary" class="u-search">查询</el-button>
+			    <el-button type="primary" class="u-search" @click="handleSearch">查询</el-button>
 			</div>
 		</div>
 		<div class="g-bd f-cb">
-			<h3 class="m-title-tag">人员列表</h3>
+			<h3 class="m-title-tag f-cb">人员列表<el-button type="primary" class="u-search f-fr" icon="el-icon-plus" @click="$router.push({path: '/member/addmember'})">添加</el-button></h3>
 			<el-table :data="tableData" border stripe style="width: 100%;" class="m-table">
 				<el-table-column
 			      	type="index"
@@ -57,7 +58,7 @@
 			<el-pagination
 				background
 				layout="prev, pager, next"
-				:page-size="pageSize"
+				:page-size="form.pageSize"
 				:total="total" class="m-page" @current-change="refreshData">
 			</el-pagination>
 		</div>
@@ -67,8 +68,13 @@
 	export default {
 		data () {
 			return {
-				currentPage: 1,
-				pageSize: 20,
+				form: {
+					pageNum: 1,
+					pageSize: 20,
+					userName: '',
+					startTime: '',
+					endTime: ''
+				},
 				total: 0,
 				pickerOptions: {
 					shortcuts: [{
@@ -98,50 +104,88 @@
 					}]
 				},
 				date: '',
-				tableData: [{
-					date: '2016-05-02',
-					name: '王小虎',
-					address: '上海市普陀区金沙江路 1518 弄'
-				}, {
-					date: '2016-05-04',
-					name: '王小虎',
-					address: '上海市普陀区金沙江路 1517 弄'
-				}, {
-					date: '2016-05-01',
-					name: '王小虎',
-					address: '上海市普陀区金沙江路 1519 弄'
-				}, {
-					date: '2016-05-03',
-					name: '王小虎',
-					address: '上海市普陀区金沙江路 1516 弄'
-				}]
+				tableData: []
 			}
 		},
 		mounted: function () {
 			var _this = this
-			this.$http.post(this.API + '/loginUser/list/json').then(function (response) {
-				if (response.data.success) {
-					_this.tableData = response.data.data.rows
-					_this.pageSize = response.data.data.pageSize
-					_this.total = response.data.data.total
-				} else {
-					_this.$message({
-						message: '错误',
-						type: 'warning'
-					})
-				}
-			}).catch(function (response) {
-				_this.$message({
-					message: '服务器请求错误',
-					type: 'warning'
-				})
-			})
+			_this.getList()
 		},
 		methods: {
+			// 编辑
+			handleEdit: function (index, row) {
+				this.$store.state.memberform = {
+					id: row.id,
+					loginName: row.loginName,
+					userName: row.userName,
+					status: row.status.toString(),
+					sysRoleId: row.sysRoleName.toString()
+				}
+				localStorage.setItem('member', JSON.stringify(this.$store.state.memberform))
+				// this.$root.Bus.$emit('editmember', [loginName, userName, status])
+				this.$router.push({path: '/member/editmember'})
+			},
+			// 删除成员
+			handleDelete: function (index, row) {
+				var _this = this
+				this.$confirm('此操作将永久删除该人员, 是否继续?', '提示', {
+					confirmButtonText: '确定',
+					cancelButtonText: '取消',
+					type: 'warning'
+				}).then(() => {
+					_this.$http.post(_this.API + '/loginUser/deletes', {ids: row.id}).then(function (response) {
+						if (response.data.success) {
+							_this.getList()
+						} else {
+							_this.$message({
+								message: '错误',
+								type: 'warning'
+							})
+						}
+					}).catch(function (response) {
+						_this.$message({
+							message: '服务器请求错误',
+							type: 'warning'
+						})
+					})
+				}).catch(() => {
+					this.$message({
+						type: 'info',
+						message: '已取消删除'
+					})
+				})
+			},
+			// 获取数据
+			getList: function () {
+				var _this = this
+				this.$http.post(this.API + '/loginUser/list/json', _this.form).then(function (response) {
+					if (response.data.success) {
+						_this.tableData = response.data.data.rows
+						_this.form.pageSize = response.data.data.pageSize
+						_this.total = response.data.data.total
+					} else {
+						_this.$message({
+							message: '错误',
+							type: 'warning'
+						})
+					}
+				}).catch(function (response) {
+					_this.$message({
+						message: '服务器请求错误',
+						type: 'warning'
+					})
+				})
+			},
+			// 查询
+			handleSearch: function () {
+				this.form.startTime = this.date[0] ? this.date[0] : ''
+				this.form.endTime = this.date[1] ? this.date[1] : ''
+				this.getList()
+			},
 			// 翻页
-			refreshData: function (currentPage) {
-				this.currentPage = currentPage
-				console.log(currentPage)
+			refreshData: function (pageNum) {
+				this.form.pageNum = pageNum
+				this.getList()
 			}
 		}
 	}

@@ -1,6 +1,6 @@
 <template>
 	<div class="g-bd">
-		<h3 class="m-title-tag">新增角色</h3>
+		<h3 class="m-title-tag">编辑角色</h3>
 		<div class="g-form-box">
 			<div class="m-input-suffix">
 			  	<label for="" class="u-label">角色名</label>
@@ -26,6 +26,7 @@
 		data () {
 			return {
 				form: {
+					id: '',
 					name: '',
 					status: '1',
 					resourceIds: []
@@ -80,30 +81,63 @@
 			}
 		},
 		mounted: function () {
-			var _this = this
-			this.$http.post(this.API + '/sysResource/selectAllResource').then(function (response) {
-				if (response.data.success) {
-					_this.checkboxList = response.data.data
-					_this.form.resourceIds.push(_this.checkboxList[0].id)
-				} else {
+			if (this.$store.state.roleform.id) {
+				this.form = this.$store.state.roleform
+				this.getRole()
+			} else {
+				this.form = JSON.parse(localStorage.getItem('role'))
+				this.getRole()
+			}
+		},
+		methods: {
+			getRole: function () {
+				var _this = this
+				_this.$http.post(_this.API + '/sysRole/update', {id: parseInt(_this.form.id)}).then(function (response) {
+					if (response.data.success) {
+						var string = response.data.data.resourceIds
+						_this.form.resourceIds = string.split(',')
+						_this.$http.post(_this.API + '/sysResource/selectAllResource').then(function (response) {
+							if (response.data.success) {
+								_this.checkboxList = response.data.data
+								var arr = []
+								for (var i = 0; i < _this.checkboxList.length; i++) {
+									if (_this.form.resourceIds.indexOf(_this.checkboxList[i].id.toString()) > -1) {
+										arr.push(_this.checkboxList[i].id)
+									}
+								}
+								_this.form.resourceIds = arr
+							} else {
+								_this.$message({
+									message: '错误',
+									center: true,
+									type: 'warning'
+								})
+							}
+						}).catch(function (response) {
+							_this.$message({
+								message: '服务器请求错误',
+								center: true,
+								type: 'warning'
+							})
+						})
+					} else {
+						_this.$message({
+							message: '错误',
+							center: true,
+							type: 'warning'
+						})
+					}
+				}).catch(function (response) {
 					_this.$message({
-						message: '错误',
+						message: '服务器请求错误',
 						center: true,
 						type: 'warning'
 					})
-				}
-			}).catch(function (response) {
-				_this.$message({
-					message: '服务器请求错误',
-					center: true,
-					type: 'warning'
 				})
-			})
-		},
-		methods: {
+			},
 			addRole: function () {
 				var _this = this
-				this.$http.post(this.API + '/sysRole/add/save', _this.form).then(function (response) {
+				this.$http.post(this.API + '/sysRole/update/save', _this.form).then(function (response) {
 					if (response.data.success) {
 						_this.$message({
 							message: '保存成功',

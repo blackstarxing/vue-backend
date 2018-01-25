@@ -19,8 +19,10 @@ import historyorders from '@/page/orders/historyorders'
 // 人员管理
 import managemember from '@/page/members/managemember'
 import addmember from '@/page/members/addmember'
+import editmember from '@/page/members/editmember'
 import managerole from '@/page/members/managerole'
 import addrole from '@/page/members/addrole'
+import editrole from '@/page/members/editrole'
 // 资金管理
 import managefund from '@/page/fund/managefund'
 import manageaccounts from '@/page/fund/manageaccounts'
@@ -99,6 +101,11 @@ export default new Router({
       component: addmember
     },
     {
+      path: '/member/editmember',
+      name: '编辑人员',
+      component: editmember
+    },
+    {
       path: '/member/managerole',
       name: '角色管理',
       component: managerole
@@ -107,6 +114,11 @@ export default new Router({
       path: '/member/addrole',
       name: '新增角色',
       component: addrole
+    },
+    {
+      path: '/member/editrole',
+      name: '编辑角色',
+      component: editrole
     },
     {
       path: '/fund/manageaccounts',

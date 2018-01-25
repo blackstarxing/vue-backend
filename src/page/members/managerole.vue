@@ -3,8 +3,8 @@
 		<div class="g-hd">
 			<h3 class="m-title-tag">筛选查询</h3>
 			<div class="m-search-box">
-			  	<el-input placeholder="请输入角色名搜索" prefix-icon="el-icon-search" class="m-search-input"></el-input>
-			    <el-button type="primary" class="u-search">查询</el-button>
+			  	<el-input placeholder="请输入角色名搜索" prefix-icon="el-icon-search" class="m-search-input" v-model="form.name"></el-input>
+			    <el-button type="primary" class="u-search" @click="getList">查询</el-button>
 			</div>
 		</div>
 		<div class="g-bd f-cb">
@@ -13,21 +13,22 @@
 				<el-table :data="tableData" border stripe style="width: 100%;" class="m-table">
 					<el-table-column
 				      	type="index"
-						label="ID"
+						label="序号"
 						width="100px">
 				    </el-table-column>
 				    <el-table-column
-						prop="date"
+						prop="name"
 						label="角色名">
 				    </el-table-column>
 				    <el-table-column
-						prop="address"
+						prop="createTime"
 						label="创建时间">
 				    </el-table-column>
-				    <el-table-column
-						prop="address"
-						label="状态">
-				    </el-table-column>
+				    <el-table-column label="状态">
+						<template slot-scope="scope">
+							{{scope.row.status?'正常':'禁用'}}
+						</template>
+					</el-table-column>
 				    <el-table-column label="操作">
 	      				<template slot-scope="scope">
 	        				<el-button size="mini" type="primary" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
@@ -38,7 +39,8 @@
 				<el-pagination
 					background
 					layout="prev, pager, next"
-					:total="1000" class="m-page">
+					:page-size="form.pageSize"
+					:total="total" class="m-page" @current-change="refreshData">
 				</el-pagination>
 			</div>			
 		</div>
@@ -48,6 +50,12 @@
 	export default {
 		data () {
 			return {
+				form: {
+					name: '',
+					pageNum: 1,
+					pageSize: 20
+				},
+				total: 0,
 				pickerOptions: {
 					shortcuts: [{
 						text: '最近一周',
@@ -76,23 +84,78 @@
 					}]
 				},
 				date: '',
-				tableData: [{
-					date: '2016-05-02',
-					name: '王小虎',
-					address: '上海市普陀区金沙江路 1518 弄'
-				}, {
-					date: '2016-05-04',
-					name: '王小虎',
-					address: '上海市普陀区金沙江路 1517 弄'
-				}, {
-					date: '2016-05-01',
-					name: '王小虎',
-					address: '上海市普陀区金沙江路 1519 弄'
-				}, {
-					date: '2016-05-03',
-					name: '王小虎',
-					address: '上海市普陀区金沙江路 1516 弄'
-				}]
+				tableData: []
+			}
+		},
+		mounted: function () {
+			var _this = this
+			_this.getList()
+		},
+		methods: {
+			handleEdit: function (index, row) {
+				this.$store.state.roleform = {
+					id: row.id,
+					name: row.name,
+					status: row.status.toString(),
+					resourceIds: ''
+				}
+				localStorage.setItem('role', JSON.stringify(this.$store.state.roleform))
+				this.$router.push({path: '/member/editrole'})
+			},
+			// 删除成员
+			handleDelete: function (index, row) {
+				var _this = this
+				this.$confirm('此操作将永久删除该角色, 是否继续?', '提示', {
+					confirmButtonText: '确定',
+					cancelButtonText: '取消',
+					type: 'warning'
+				}).then(() => {
+					_this.$http.post(_this.API + '/sysRole/deletes', {ids: row.id}).then(function (response) {
+						if (response.data.success) {
+							_this.getList()
+						} else {
+							_this.$message({
+								message: '错误',
+								type: 'warning'
+							})
+						}
+					}).catch(function (response) {
+						_this.$message({
+							message: '服务器请求错误',
+							type: 'warning'
+						})
+					})
+				}).catch(() => {
+					this.$message({
+						type: 'info',
+						message: '已取消删除'
+					})
+				})
+			},
+			getList: function () {
+				var _this = this
+				this.$http.post(this.API + '/sysRole/list/json', _this.form).then(function (response) {
+					if (response.data.success) {
+						_this.tableData = response.data.data.rows
+						_this.form.pageSize = response.data.data.pageSize
+						_this.total = response.data.data.total
+					} else {
+						_this.$message({
+							message: '错误',
+							type: 'warning'
+						})
+					}
+				}).catch(function (response) {
+					_this.$message({
+						message: '服务器请求错误',
+						type: 'warning'
+					})
+				})
+			},
+			// 翻页
+			refreshData: function (pageNum) {
+				this.form.pageNum = pageNum
+				this.getList()
 			}
 		}
 	}

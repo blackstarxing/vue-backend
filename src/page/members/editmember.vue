@@ -1,6 +1,6 @@
 <template>
 	<div class="g-bd">
-		<h3 class="m-title-tag">新增人员</h3>
+		<h3 class="m-title-tag">编辑人员</h3>
 		<div class="g-form-box">
 			<div class="m-input-suffix">
 			  	<label for="" class="u-label">人员名称</label>
@@ -8,7 +8,7 @@
 			</div>
 			<div class="m-input-suffix">
 			  	<label for="" class="u-label">手机号码</label>
-			  	<el-input placeholder="请输入手机号码" v-model.number="form.loginName" :maxlength="11"></el-input>
+			  	<el-input placeholder="请输入手机号码" v-model="form.loginName" :maxlength="11"></el-input>
 			</div>
 			<div class="m-input-suffix">
 			  	<label for="" class="u-label">配置角色</label>
@@ -35,6 +35,7 @@
 		data () {
 			return {
 				form: {
+					id: '',
 					loginName: '',
 					userName: '',
 					status: '1',
@@ -44,10 +45,20 @@
 			}
 		},
 		mounted: function () {
+			if (this.$store.state.memberform.id) {
+				this.form = this.$store.state.memberform
+			} else {
+				this.form = JSON.parse(localStorage.getItem('member'))
+			}
 			var _this = this
-			_this.$http.post(this.API + '/sysRole/selectAllRole').then(function (response) {
+			_this.$http.post(_this.API + '/sysRole/selectAllRole').then(function (response) {
 				if (response.data.success) {
 					_this.options = response.data.data
+					for (var i = 0; i < _this.options.length; i++) {
+						if (_this.options[i].id === parseInt(_this.form.sysRoleId)) {
+							_this.form.sysRoleId = _this.options[i].id
+						}
+					}
 				} else {
 					_this.$message({
 						message: '错误',
@@ -66,7 +77,8 @@
 		methods: {
 			addMember: function () {
 				var _this = this
-				this.$http.post(this.API + '/loginUser/add/save', _this.form).then(function (response) {
+				this.form.status = parseInt(this.form.status)
+				this.$http.post(this.API + '/loginUser/update/save', _this.form).then(function (response) {
 					if (response.data.success) {
 						_this.$message({
 							message: '保存成功',

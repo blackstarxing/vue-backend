@@ -1,6 +1,7 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
+import Vuex from 'vuex'
 import App from './App'
 import router from './router'
 import axios from 'axios'
@@ -9,6 +10,7 @@ import ElementUI from 'element-ui'
 // import popper from 'popper.js'
 
 Vue.use(ElementUI)
+Vue.use(Vuex)
 // Vue.use(popper)
 Vue.prototype.$http = axios
 Vue.config.productionTip = false
@@ -28,6 +30,18 @@ if (process.env.NODE_ENV === 'development') {
 } else {
 	Vue.prototype.API = ''
 }
+
+const store = new Vuex.Store({
+  state: {
+    memberform: {},
+    roleform: {}
+  },
+  mutations: {
+    increment (state) {
+      state.count++
+    }
+  }
+})
 
 // 登录拦截
 // router.beforeEach((to, from, next) => {
@@ -52,6 +66,7 @@ router.afterEach((to, from, next) => {
 new Vue({
   el: '#app',
   router,
+  store,
   template: '<App/>',
   components: { App }
 })

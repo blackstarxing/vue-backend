@@ -176,6 +176,15 @@
 				var _this = this
 				_this.$refs[formName].validate((valid) => {
 					if (valid) {
+						if (_this.winLossCalculation === 1) {
+							_this.winLossCalculation = 'A'
+						} else if (_this.winLossCalculation === 2) {
+							_this.winLossCalculation = 'B'
+						} else if (_this.winLossCalculation === 3) {
+							_this.winLossCalculation = 'A/' + _this.divideradio
+						} else {
+							_this.winLossCalculation = 'A*' + _this.multiplyradio
+						}
 						_this.$http.post(_this.API + '/accountNumber/add/save', _this.form).then(function (response) {
 							if (response.data.success) {
 								_this.$message({
@@ -183,6 +192,7 @@
 									center: true,
 									type: 'success'
 								})
+								_this.$router.push({path: '/fund/manageaccounts'})
 							} else {
 								_this.$message({
 									message: response.data.msg,
