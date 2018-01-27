@@ -8,7 +8,7 @@
 				</div>
 				<div class="m-input-suffix">
 				  	<el-input placeholder="请输入图片验证码" class="code-text" v-model="imgCode"></el-input>
-				  	<img v-bind:src="imgUrl" alt="" class="code-pic">
+				  	<img v-bind:src="imgUrl" alt="" class="code-pic" @click="getImgCode">
 				</div>
 				<el-button type="primary" @click="getCode">确定</el-button>
 			</div>
@@ -139,6 +139,7 @@
 			border: 1px solid #DCDFE6;
 			box-sizing: border-box;
 			margin-bottom: 5px;
+			cursor: pointer;
 		}
 		.m-nd{
 			span{

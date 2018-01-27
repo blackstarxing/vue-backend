@@ -45,7 +45,7 @@ const store = new Vuex.Store({
 
 // 登录拦截
 // router.beforeEach((to, from, next) => {
-// 	let userName = localStorage.getItem('userName')
+// 	let userName = document.cookie.match(new RegExp('(^| )userName=([^;]*)(;|$)'))
 // 	if (userName) { // 如果有就直接到首页咯
 // 		next()
 // 	} else {

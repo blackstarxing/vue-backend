@@ -1,6 +1,6 @@
 <template>
 	<div class="g-bd">
-		<h3 class="m-title-tag">新增账号</h3>
+		<h3 class="m-title-tag">编辑账号</h3>
 		<div class="g-form-box">
 			<el-form :model="form" :rules="rules" ref="form" label-width="120px" class="demo-ruleForm">
 				<el-form-item label="下单账号" prop="accountNumber">
@@ -50,8 +50,8 @@
 					    </el-option>
 					</el-select>
 				</el-form-item>
-				<el-form-item label="初始余额" prop="afterBalence">
-				  	<el-input placeholder="请输入账户余额" v-model.number="form.afterBalence"></el-input>
+				<el-form-item label="初始余额" prop="afterBalance">
+				  	<el-input placeholder="请输入账户余额" v-model.number="form.afterBalance"></el-input>
 				</el-form-item>
 				<el-form-item label="投注状态">
 				  	<el-radio v-model.number="form.bettingStatus" label="1" border>正常</el-radio>
@@ -80,7 +80,7 @@
 					effectiveWaterBackwater: 0,
 					waterCalculation: '1',
 					loginUserId: '',
-					afterBalence: 0,
+					afterBalance: 0,
 					bettingStatus: '1',
 					usingStatus: '1'
 				},
@@ -128,9 +128,35 @@
 		},
 		mounted: function () {
 			this.$nextTick(function () {
-				this.modeoptions[2].label = 'A/' + this.divideradio
-				this.modeoptions[3].label = 'A*' + this.multiplyradio
+				var id = localStorage.getItem('accountId')
 				var _this = this
+				this.$http.post(this.API + '/accountNumber/revamp', {id: id}).then(function (response) {
+					if (response.data.success) {
+						_this.form = response.data.data
+						if (response.data.data.winLossCalculation.indexOf('/') > -1) {
+							_this.divideradio = parseFloat(response.data.data.winLossCalculation.slice(2))
+						} else {
+							_this.multiplyradio = parseFloat(response.data.data.winLossCalculation.slice(2))
+						}
+						_this.modeoptions[2].label = 'A/' + _this.divideradio
+						_this.modeoptions[3].label = 'A*' + _this.multiplyradio
+						_this.form.waterCalculation = response.data.data.waterCalculation.toString()
+						_this.form.bettingStatus = response.data.data.bettingStatus.toString()
+						_this.form.usingStatus = response.data.data.usingStatus.toString()
+					} else {
+						_this.$message({
+							message: '错误',
+							center: true,
+							type: 'warning'
+						})
+					}
+				}).catch(function (response) {
+					_this.$message({
+						message: '服务器请求错误',
+						center: true,
+						type: 'warning'
+					})
+				})
 				this.$http.post(this.API + '/terraceInfo/listJson').then(function (response) {
 					if (response.data.success) {
 						_this.options = response.data.data
@@ -176,16 +202,16 @@
 				var _this = this
 				_this.$refs[formName].validate((valid) => {
 					if (valid) {
-						if (_this.form.winLossCalculation === 1) {
+						if (_this.form.winLossCalculation === '1') {
 							_this.form.winLossCalculation = 'A'
-						} else if (_this.form.winLossCalculation === 2) {
+						} else if (_this.form.winLossCalculation === '2') {
 							_this.form.winLossCalculation = 'B'
-						} else if (_this.form.winLossCalculation === 3) {
+						} else if (_this.form.winLossCalculation === '3') {
 							_this.form.winLossCalculation = 'A/' + _this.divideradio
 						} else {
 							_this.form.winLossCalculation = 'A*' + _this.multiplyradio
 						}
-						_this.$http.post(_this.API + '/accountNumber/add/save', _this.form).then(function (response) {
+						_this.$http.post(_this.API + '/accountNumber/revamp/save', _this.form).then(function (response) {
 							if (response.data.success) {
 								_this.$message({
 									message: '保存成功',

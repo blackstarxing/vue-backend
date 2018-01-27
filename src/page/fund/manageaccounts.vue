@@ -73,7 +73,7 @@
 					label="流水计算">
 			    </el-table-column>
 			    <el-table-column
-					prop="afterBalance"
+					prop="balance"
 					label="账户余额">
 			    </el-table-column>
 			    <el-table-column
@@ -104,7 +104,7 @@
 			    </el-table-column>
 			    <el-table-column label="操作" width="280">
       				<template slot-scope="scope">
-      					<el-button size="mini" type="primary" @click="$router.push({path: '/fund/accountdetail', query: {plan: 'private'}})">明细</el-button>
+      					<el-button size="mini" type="primary" @click="$router.push({path: '/fund/accountdetail'})">明细</el-button>
         				<el-button size="mini" type="primary" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
         				<el-button size="mini" type="primary" @click="handleDelete(scope.$index, scope.row)">提醒</el-button>
       				</template>
@@ -234,10 +234,9 @@
 				this.form.pageNum = pageNum
 				this.getList()
 			},
-			// 完成订单
-			handleComplete (index, row) {
-				this.dialogVisible = true
-				this.min_odds = row.odds
+			handleEdit (index, row) {
+				localStorage.setItem('accountId', row.id)
+				this.$router.push({path: '/fund/editaccount'})
 			},
 			// 退单
 			handleCancel (index, row) {

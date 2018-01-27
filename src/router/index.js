@@ -27,6 +27,7 @@ import editrole from '@/page/members/editrole'
 import managefund from '@/page/fund/managefund'
 import manageaccounts from '@/page/fund/manageaccounts'
 import accountdetail from '@/page/fund/accountdetail'
+import editaccount from '@/page/fund/editaccount'
 import addaccount from '@/page/fund/addaccount'
 // 设置
 import setting from '@/page/set/setting'
@@ -134,6 +135,11 @@ export default new Router({
       path: '/fund/addaccount',
       name: '新增账号',
       component: addaccount
+    },
+    {
+      path: '/fund/editaccount',
+      name: '编辑账号',
+      component: editaccount
     },
     {
       path: '/fund/managefund',

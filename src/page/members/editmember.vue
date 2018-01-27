@@ -55,8 +55,9 @@
 				if (response.data.success) {
 					_this.options = response.data.data
 					for (var i = 0; i < _this.options.length; i++) {
-						if (_this.options[i].id === parseInt(_this.form.sysRoleId)) {
+						if (_this.options[i].name === _this.form.sysRoleId) {
 							_this.form.sysRoleId = _this.options[i].id
+							console.log(_this.form)
 						}
 					}
 				} else {
