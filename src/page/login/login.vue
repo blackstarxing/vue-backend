@@ -14,8 +14,9 @@
 			</div>
 			<div class="m-nd" v-else>
 				<div class="m-input-suffix" style="margin-bottom:19px;">
-				  	<el-input placeholder="请输入短信验证码" class="code-text"></el-input>
-				  	<span>{{60}}s 重新获取</span>
+				  	<el-input placeholder="请输入短信验证码" class="code-text" v-model="code"></el-input>
+				  	<span v-if="second>0">{{second}}s</span>
+					<span class="reget" v-else @click="getVerificationCode">重新获取</span>
 				</div>
 				<el-button type="primary" @click="handleLogin">确定</el-button>
 				<el-button @click="step = true">返回</el-button>
@@ -33,7 +34,9 @@
 				uuid: '',
 				imgCode: '',
 				avatar: '',
-				userName: ''
+				userName: '',
+				code: '',
+				second: 60
 			}
 		},
 		mounted: function () {
@@ -64,6 +67,7 @@
 				this.$http.get(this.API + '/login/isEffectiveCode', {params: data}).then(function (response) {
 					if (response.data.success) {
 						_this.step = false
+						_this.getVerificationCode()
 					} else {
 						_this.$message({
 							message: '图片验证码错误',
@@ -79,16 +83,51 @@
 					})
 				})
 			},
+			countDown: function () {
+				if (this.second > 0) {
+					setTimeout(function () {
+						this.second --
+						this.countDown()
+					}.bind(this), 1000)
+				}
+			},
+			// 获取验证码
+			getVerificationCode: function () {
+				var _this = this
+				_this.second = 60
+				this.$http.post(this.API + '/getLogin/verificationCode', {loginName: _this.phone}).then(function (response) {
+					_this.$message({
+						message: '短信验证码已发送',
+						center: true,
+						type: 'success'
+					})
+					_this.countDown()
+				}).catch(function (response) {
+					_this.$message({
+						message: '服务器请求错误',
+						center: true,
+						type: 'warning'
+					})
+				})
+			},
 			// 登录
 			handleLogin: function () {
-				this.$http.post(this.API + '/login/submit?loginName=admin').then(function (response) {
-					this.avatar = response.data.data.photo ? response.data.data.photo : '/build/logo.png'
-					this.userName = response.data.data.userName
-					window.document.cookie = 'userName=' + this.userName
-					window.document.cookie = 'loginName=' + response.data.data.loginName
-					window.document.cookie = 'avatar=' + this.avatar
-					this.$emit('avatar', [this.avatar, this.userName])
-					this.$router.push({path: '/login/landing'})
+				this.$http.post(this.API + '/login/submit', {loginName: this.phone, code: this.code}).then(function (response) {
+					if (response.data.success) {
+						this.avatar = response.data.data.photo ? response.data.data.photo : '/build/logo.png'
+						this.userName = response.data.data.userName
+						window.document.cookie = 'userName=' + this.userName
+						window.document.cookie = 'loginName=' + response.data.data.loginName
+						window.document.cookie = 'avatar=' + this.avatar
+						this.$emit('avatar', [this.avatar, this.userName])
+						this.$router.push({path: '/login/landing'})
+					} else {
+						this.$message({
+							message: response.data.msg,
+							center: true,
+							type: 'warning'
+						})
+					}
 				}.bind(this)).catch(function (response) {
 					console.log(response)
 				})
@@ -143,8 +182,14 @@
 		}
 		.m-nd{
 			span{
+				display: inline-block;
+				width: 70px;
 				font-size: 16px;
+				text-align: right;
 				color: rgba(21,182,150,0.60);
+				&.reget{
+					cursor: pointer;
+				}
 			}
 		}
 	}

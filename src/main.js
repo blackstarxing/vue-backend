@@ -16,6 +16,7 @@ Vue.prototype.$http = axios
 Vue.config.productionTip = false
 
 // 解决post方式后端无法获取参数
+axios.defaults.withCredentials = true
 axios.defaults.transformRequest = [function (data) {
 	// Do whatever you want to transform the data
 	let newData = ''

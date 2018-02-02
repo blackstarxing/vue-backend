@@ -99,7 +99,7 @@
 			    </el-table-column>
 			     <el-table-column label="账户状态">
 					<template slot-scope="scope">
-						<span :class="[scope.row.usingStatus == 1 ? 's-fc-on' : 's-fc-off']">{{scope.row.bettingStatus == 1 ?'正常':'禁用'}}</span>
+						<span :class="[scope.row.usingStatus == 1 ? 's-fc-on' : 's-fc-off']">{{scope.row.usingStatus == 1 ?'正常':'禁用'}}</span>
 					</template>
 			    </el-table-column>
 			    <el-table-column label="操作" width="280">
