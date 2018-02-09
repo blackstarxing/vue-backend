@@ -12,9 +12,10 @@
 			      	start-placeholder="下单时间（起）"
 			      	end-placeholder="下单时间（止）"
 			      	:picker-options="pickerOptions"
+			      	value-format="yyyy-MM-dd"
 			      	class="m-search-date">
 			    </el-date-picker>
-			    <el-button type="primary" class="u-search">查询</el-button>
+			    <el-button type="primary" class="u-search" @click="handleSearch">查询</el-button>
 			</div>
 		</div>
 		<div class="g-bd f-cb">
@@ -26,63 +27,64 @@
 					width="100px">
 			    </el-table-column>
 			    <el-table-column
-					prop="date"
+					prop="userName"
 					label="负责人">
 			    </el-table-column>
 			    <el-table-column
-					prop="name"
+					prop="accountNumber"
 					label="账号">
 			    </el-table-column>
 			    <el-table-column
-					prop="address"
+					prop="terraceName"
 					label="平台">
 			    </el-table-column>
 			    <el-table-column
-					prop="address"
+					prop="cCreateTime"
 					label="下单日期">
 			    </el-table-column>
 			    <el-table-column
-					prop="address"
+					prop="mStartTime"
 					label="比赛日期">
 			    </el-table-column>
 			    <el-table-column
-					prop="address"
+					prop="leagueMatchName"
 					label="联赛"
 					width="110">
 			    </el-table-column>
 			    <el-table-column
-					prop="address"
+					prop="homeTeam"
 					label="主队">
 			    </el-table-column>
 			    <el-table-column
-					prop="address"
+					prop="customerTeam"
 					label="客队">
 			    </el-table-column>
 			    <el-table-column
-					prop="address"
+					prop="handcap"
 					label="盘口">
 			    </el-table-column>
 			    <el-table-column
-					prop="address"
+					prop="odds"
 					label="赔率">
 			    </el-table-column>
 			    <el-table-column
-					prop="address"
+					prop="corderBettingMoney"
 					label="投注金额">
 			    </el-table-column>
 			    <el-table-column
-					prop="address"
+					prop="fullScore"
 					label="比分">
 			    </el-table-column>
 			    <el-table-column
-					prop="address"
+					prop="corderWinorloss"
 					label="输赢">
 			    </el-table-column>
 			</el-table>
 			<el-pagination
 				background
 				layout="prev, pager, next"
-				:total="1000" class="m-page">
+				:page-size="form.pageSize"
+				:total="total" class="m-page" @current-change="refreshData">
 			</el-pagination>
 		</div>
 	</div>
@@ -118,45 +120,58 @@
 						}
 					}]
 				},
+				total: 0,
+				form: {
+					pageNum: 1,
+					pageSize: 20,
+					id: '',
+					startTime: '',
+					endTime: ''
+				},
 				date: '',
-				select: '',
-				accounts: [{
-					value: '1',
-					label: 'ss'
-				}],
-				tableData: [{
-					date: '2016-05-02',
-					name: '王小虎',
-					address: '上海市普陀区金沙江路 1518 弄',
-					odds: 2.51,
-					color: '#333',
-					state: 1
-				}, {
-					date: '2016-05-04',
-					name: '王小虎',
-					address: '上海市普陀区金沙江路 1517 弄',
-					odds: 2.51,
-					color: '#666',
-					state: 2
-				}, {
-					date: '2016-05-01',
-					name: '王小虎',
-					address: '上海市普陀区金沙江路 1519 弄',
-					odds: 2.51,
-					color: '#233',
-					state: 2
-				}, {
-					date: '2016-05-03',
-					name: '王小虎',
-					address: '上海市普陀区金沙江路 1516 弄',
-					odds: 2.51,
-					color: '#878',
-					state: 1
-				}]
+				tableData: []
 			}
 		},
+		mounted: function () {
+			var _this = this
+			_this.form.id = localStorage.getItem('accountId')
+			_this.getList()
+		},
 		methods: {
-
+			// 获取数据
+			getList: function () {
+				var _this = this
+				this.$http.post(this.API + '/accountNumber/pageJsonForAccountNumaberDetails', _this.form).then(function (response) {
+					if (response.data.success) {
+						_this.tableData = response.data.data.rows
+						_this.form.pageSize = response.data.data.pageSize
+						_this.total = response.data.data.total
+					} else {
+						_this.$message({
+							message: '错误',
+							center: true,
+							type: 'warning'
+						})
+					}
+				}).catch(function (response) {
+					_this.$message({
+						message: '服务器请求错误',
+						center: true,
+						type: 'warning'
+					})
+				})
+			},
+			// 查询
+			handleSearch: function () {
+				this.form.startTime = this.date[0] ? this.date[0] : ''
+				this.form.endTime = this.date[1] ? this.date[1] : ''
+				this.getList()
+			},
+			// 翻页
+			refreshData: function (pageNum) {
+				this.form.pageNum = pageNum
+				this.getList()
+			}
 		}
 	}
 </script>

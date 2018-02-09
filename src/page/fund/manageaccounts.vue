@@ -104,7 +104,7 @@
 			    </el-table-column>
 			    <el-table-column label="操作" width="280">
       				<template slot-scope="scope">
-      					<el-button size="mini" type="primary" @click="$router.push({path: '/fund/accountdetail'})">明细</el-button>
+      					<el-button size="mini" type="primary" @click="handleDetail(scope.$index, scope.row)">明细</el-button>
         				<el-button size="mini" type="primary" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
         				<el-button size="mini" type="primary" @click="handleDelete(scope.$index, scope.row)">提醒</el-button>
       				</template>
@@ -213,12 +213,14 @@
 					} else {
 						_this.$message({
 							message: '错误',
+							center: true,
 							type: 'warning'
 						})
 					}
 				}).catch(function (response) {
 					_this.$message({
 						message: '服务器请求错误',
+						center: true,
 						type: 'warning'
 					})
 				})
@@ -234,6 +236,12 @@
 				this.form.pageNum = pageNum
 				this.getList()
 			},
+			// 明细
+			handleDetail (index, row) {
+				localStorage.setItem('accountId', row.id)
+				this.$router.push({path: '/fund/accountdetail'})
+			},
+			// 编辑
 			handleEdit (index, row) {
 				localStorage.setItem('accountId', row.id)
 				this.$router.push({path: '/fund/editaccount'})
@@ -242,12 +250,6 @@
 			handleCancel (index, row) {
 				this.dialogVisible2 = true
 				this.textarea = ''
-			},
-			handleSubmit () {
-
-			},
-			handleSubmit2 () {
-
 			},
 			reset () {
 				this.min_odds = 0

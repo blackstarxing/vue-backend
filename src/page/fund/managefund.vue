@@ -351,7 +351,6 @@
 			// 添加快捷回复
 			handleReply: function () {
 				var _this = this
-				console.log(_this.content)
 				this.$http.post(this.API + '/quickReplay/addSaveForRechargeAudit', {content: _this.content}).then(function (response) {
 					if (response.data.success) {
 						_this.$message({

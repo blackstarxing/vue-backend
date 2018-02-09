@@ -191,7 +191,8 @@
 			},
 			// 历史明细
 			handleHistory (index, row) {
-				this.$router.push({path: '/orders/historyorders', query: {id: '1'}})
+				localStorage.setItem('accountId', row.id)
+				this.$router.push({path: '/orders/historyorders'})
 			},
 			// 充值
 			handleRecharge (index, row) {
