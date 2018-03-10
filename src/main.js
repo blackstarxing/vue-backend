@@ -27,7 +27,7 @@ axios.defaults.transformRequest = [function (data) {
 }]
 
 if (process.env.NODE_ENV === 'development') {
-	Vue.prototype.API = 'http://192.168.0.109:8000/admin'
+	Vue.prototype.API = 'http://192.168.0.121:8000/admin'
 } else {
 	Vue.prototype.API = ''
 }

@@ -37,8 +37,8 @@
 				  	<el-input placeholder="请输入数值" v-model.number="form.effectiveWaterBackwater"></el-input>
 				</el-form-item>
 				<el-form-item label="流水计算">
-				  	<el-radio v-model.number="form.waterCalculation" label="1" border>1</el-radio>
-	    			<el-radio v-model.number="form.waterCalculation" label="2" border>2</el-radio>
+				  	<el-radio v-model="form.waterCalculation" label="1" border>1</el-radio>
+	    			<el-radio v-model="form.waterCalculation" label="2" border>2</el-radio>
 				</el-form-item>
 				<el-form-item label="负责人" prop="loginUserId">
 				  	<el-select v-model.number="form.loginUserId" placeholder="请选择">
@@ -50,16 +50,16 @@
 					    </el-option>
 					</el-select>
 				</el-form-item>
-				<el-form-item label="初始余额" prop="afterBalence">
-				  	<el-input placeholder="请输入账户余额" v-model.number="form.afterBalence"></el-input>
+				<el-form-item label="初始余额" prop="afterBalance">
+				  	<el-input placeholder="请输入账户余额" v-model.number="form.afterBalance"></el-input>
 				</el-form-item>
 				<el-form-item label="投注状态">
-				  	<el-radio v-model.number="form.bettingStatus" label="1" border>正常</el-radio>
-	    			<el-radio v-model.number="form.bettingStatus" label="2" border>禁用</el-radio>
+				  	<el-radio v-model="form.bettingStatus" label="1" border>正常</el-radio>
+	    			<el-radio v-model="form.bettingStatus" label="2" border>禁用</el-radio>
 				</el-form-item>
 				<el-form-item label="使用状态">
-				  	<el-radio v-model.number="form.usingStatus" label="1" border>正常</el-radio>
-	    			<el-radio v-model.number="form.usingStatus" label="2" border>禁用</el-radio>
+				  	<el-radio v-model="form.usingStatus" label="1" border>正常</el-radio>
+	    			<el-radio v-model="form.usingStatus" label="2" border>禁用</el-radio>
 				</el-form-item>
 				<el-button type="primary" class="u-save" @click="addAccount('form')">保存</el-button><el-button class="u-empty">清空</el-button>
 			</el-form>
@@ -80,7 +80,7 @@
 					effectiveWaterBackwater: 0,
 					waterCalculation: '1',
 					loginUserId: '',
-					afterBalence: 0,
+					afterBalance: 0,
 					bettingStatus: '1',
 					usingStatus: '1'
 				},
@@ -119,7 +119,7 @@
 					loginUserId: [
 						{ required: true, message: '请选择负责人', trigger: 'blur' }
 					],
-					afterBalence: [
+					afterBalance: [
 						{ required: true, message: '请输入账户余额', trigger: 'blur' },
 						{ type: 'number', message: '请输入数字', trigger: 'blur' }
 					]
@@ -174,13 +174,15 @@
 			// 提交
 			addAccount: function (formName) {
 				var _this = this
+				console.log(_this.form.winLossCalculation)
 				_this.$refs[formName].validate((valid) => {
 					if (valid) {
-						if (_this.form.winLossCalculation === 1) {
+						if (_this.form.winLossCalculation === '1') {
+							console.log('aaaa')
 							_this.form.winLossCalculation = 'A'
-						} else if (_this.form.winLossCalculation === 2) {
+						} else if (_this.form.winLossCalculation === '2') {
 							_this.form.winLossCalculation = 'B'
-						} else if (_this.form.winLossCalculation === 3) {
+						} else if (_this.form.winLossCalculation === '3') {
 							_this.form.winLossCalculation = 'A/' + _this.divideradio
 						} else {
 							_this.form.winLossCalculation = 'A*' + _this.multiplyradio
